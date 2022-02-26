@@ -8,14 +8,22 @@ namespace BinomialHeap
 {
     internal class BinomialTree
     {
-        private Node root;
-        public Node Root { get; set; }
-        private int k;
-        public int K { get; set; }
+        private BinomialTree parent;
+        private int key;
 
-        public BinomialTree(Node root)
+        public BinomialTree Parent { get; set; }
+        public int Key { get; set; }
+        private List<BinomialTree> siblings = new List<BinomialTree>();
+        public List<BinomialTree> Siblings { get; }
+        private BinomialTree leftChild;
+        public BinomialTree Child { get; set; }
+        private int degree;
+        public int Degree { get; set; }
+
+        public BinomialTree(Node parent, int key)
         {
-            this.root = root;
+            this.parent = parent;
+            this.key = key;
         }
 
 
