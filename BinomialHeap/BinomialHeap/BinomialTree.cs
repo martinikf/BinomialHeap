@@ -8,24 +8,18 @@ namespace BinomialHeap
 {
     internal class BinomialTree
     {
-        private BinomialTree parent;
-        private int key;
-
         public BinomialTree Parent { get; set; }
         public int Key { get; set; }
-        private List<BinomialTree> siblings = new List<BinomialTree>();
-        public List<BinomialTree> Siblings { get; }
-        private BinomialTree leftChild;
-        public BinomialTree Child { get; set; }
-        private int degree;
+        public List<BinomialTree> Siblings { get; set; }
+        public BinomialTree LeftChild { get; set; }
         public int Degree { get; set; }
+       
 
-        public BinomialTree(Node parent, int key)
+        public BinomialTree(BinomialTree parent, int key)
         {
-            this.parent = parent;
-            this.key = key;
+            this.Parent = parent;
+            this.Key = key;
+            Siblings = new();
         }
-
-
     }
 }
