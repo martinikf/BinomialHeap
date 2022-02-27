@@ -8,7 +8,6 @@ namespace BinomialHeap
 {
     internal class BinomialHeap
     {
-        //private List<BinomialTree> heap = new List<BinomialTree>();
         private List<BinomialTree> heap; //Sorted by degrees
         public BinomialHeap()
         {
