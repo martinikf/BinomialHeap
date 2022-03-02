@@ -32,15 +32,19 @@ namespace BinomialHeap
         //Determines which tree should be on top and connects them accordingly
         public BinomialTree BinomialLink(BinomialTree y, BinomialTree z)
         {
-            // set t2 as min
+            // set z as min
             if(y.Key < z.Key)
             {
                 (y, z) = (z, y);
             }
 
             y.Parent = z;
-            y.Siblings = z.LeftChild.Siblings;
-            y.Siblings.Insert(0, z.LeftChild);
+            if(z.LeftChild != null)
+            {
+                y.Siblings = z.LeftChild.Siblings;
+                y.Siblings.Insert(0, z.LeftChild);
+            }
+
             z.LeftChild = y;
             z.Degree++;
 
@@ -70,29 +74,28 @@ namespace BinomialHeap
             }
 
             i = 0;
-            while (true)
+            while (i + 1 < trees.Count)
             {
-                if (i + 1 >= trees.Count) break;
-                else if(trees[i].Degree != trees[i+1].Degree)
+                if( trees[i].Degree != trees[i+1].Degree)
                 {
                     i += 1;
                     continue;
                 }
                 else
                 {
-                    if(i + 2 < trees.Count && trees[i+1].Degree == trees[i + 2].Degree)
+                    if(i + 2 < trees.Count && trees[i + 1].Degree == trees[i + 2].Degree)
                     {
-                        var newTree = BinomialLink(trees[i+1], trees[i + 2]);
+                        var newTree = BinomialLink(trees[i + 1], trees[i + 2]);
                         trees[i+1] = newTree;
                         trees.Remove(trees[i + 2]);
                         i += 1;
                     }
                     else
                     {
-                        var newTree = BinomialLink(trees[i], trees[i+1]);
+                        var newTree = BinomialLink(trees[i], trees[i + 1]);
                         trees[i] = newTree;
                         trees.Remove(trees[i + 1]);
-                        i +=1;
+                        
                     }
                 }
             }
@@ -105,6 +108,7 @@ namespace BinomialHeap
             this.Union(newHeap);
         }
 
+        //Nějaka stara metoda?
         public void DecreaseKey(BinomialTree t, int value)
         {
             if (value > t.Key) return;
@@ -132,6 +136,7 @@ namespace BinomialHeap
                 newList.Add(sib);
             }
             newHeap.heap = newList;
+            this.heap.Remove(t);
             this.Union(newHeap);
         }
 
@@ -141,6 +146,25 @@ namespace BinomialHeap
             Delete(min);
 
             return min;
+        }
+
+        public void Print()
+        {
+            Console.WriteLine("PRINT-------------");
+            Console.WriteLine($"Trees: {heap.Count}");
+            foreach(var tree in heap)
+            {
+                Console.WriteLine($"Tree degree: {tree.Degree}");
+                Console.WriteLine($"<---{tree.Key}");
+                if(tree.LeftChild != null)
+                {
+                    Console.Write($"{tree.LeftChild.Key} ---> ");
+                    if(tree.LeftChild.Siblings != null)
+                        foreach (var sib in tree.LeftChild.Siblings)
+                         Console.Write($"{sib.Key} ---> ");
+                }
+                Console.WriteLine();
+            }
         }
     }
 }

@@ -15,9 +15,9 @@ namespace BinomialHeap
         public int Degree { get; set; }
        
 
-        public BinomialTree(BinomialTree parent, int key)
+        public BinomialTree(int key)
         {
-            this.Parent = parent;
+            Parent = null;
             this.Key = key;
             Siblings = new();
         }
