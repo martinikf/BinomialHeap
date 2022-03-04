@@ -8,19 +8,21 @@ namespace BinomialHeap
         {
             BinomialHeap bh = new();
             Random r = new Random();
-            List<BinomialTree> trees = new() { new(1), new(2)};
-            /*
-            for (int i = 0; i < 100; i++)
-            {
-                trees.Add(new(r.Next(100)));
-            }
-            */
-
-            trees.ForEach(tree => bh.Insert(tree));
+            List<BinomialTree> trees = new() { new(1), new(2) };
             
-            bh.Print();
-            bh.ExtractMin();
-            bh.Print();
+            for (int i = 0; i < 16; i++)
+            {
+                //trees.Add(new(r.Next(100)));
+                bh.Insert(new(r.Next(1000)));
+                bh.Print();
+            }
+            
+
+            //trees.ForEach(tree => bh.Insert(tree));
+            
+            //bh.Print();
+             bh.ExtractMin();
+            //bh.Print();
         }
     }
 }

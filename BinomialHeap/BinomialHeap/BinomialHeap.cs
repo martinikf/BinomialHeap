@@ -17,7 +17,8 @@ namespace BinomialHeap
         {
            this.heap = heap;
         }
-       
+        public uint Size { get; set; }
+
         public BinomialTree Min()
         {
             BinomialTree min = heap[0];
@@ -105,6 +106,7 @@ namespace BinomialHeap
         public void Insert(BinomialTree t)
         {
             BinomialHeap newHeap = new BinomialHeap(new List<BinomialTree>() { t});
+            Size++;
             this.Union(newHeap);
         }
 
@@ -135,7 +137,9 @@ namespace BinomialHeap
             {
                 newList.Add(sib);
             }
+            newList.Reverse();
             newHeap.heap = newList;
+            Size--;
             this.heap.Remove(t);
             this.Union(newHeap);
         }
@@ -144,24 +148,22 @@ namespace BinomialHeap
         {
             var min = this.Min();
             Delete(min);
-
             return min;
         }
 
         public void Print()
         {
-            Console.WriteLine("PRINT-------------");
+            Console.WriteLine($"\nBINOMIAL HEAP [{heap.Count()};{Size}]");
             Console.WriteLine($"Trees: {heap.Count}");
             foreach(var tree in heap)
             {
-                Console.WriteLine($"Tree degree: {tree.Degree}");
-                Console.WriteLine($"<---{tree.Key}");
+                Console.WriteLine($"\nRoot:[{tree.Key};{tree.Degree}]");
                 if(tree.LeftChild != null)
                 {
-                    Console.Write($"{tree.LeftChild.Key} ---> ");
+                    Console.Write($"[{tree.LeftChild.Key};{tree.LeftChild.Degree}]");
                     if(tree.LeftChild.Siblings != null)
                         foreach (var sib in tree.LeftChild.Siblings)
-                         Console.Write($"{sib.Key} ---> ");
+                         Console.Write($"[{sib.Key};{sib.Degree}]");
                 }
                 Console.WriteLine();
             }
