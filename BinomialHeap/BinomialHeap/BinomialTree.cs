@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BinomialHeap
 {
-    internal class BinomialTree
+    internal class BinomialTree : IComparable<BinomialTree>
     {
         public BinomialTree? Parent { get; set; }
         public int Key { get; set; }
@@ -32,6 +32,12 @@ namespace BinomialHeap
                 {
                     s.Print(false);
                 }
+        }
+
+        public int CompareTo(BinomialTree? other)
+        {
+            if(other == null) return 1;
+            return this.Key.CompareTo(other.Key);
         }
     }
 }

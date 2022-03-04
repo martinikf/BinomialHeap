@@ -9,12 +9,15 @@ namespace BinomialHeap
             BinomialHeap bh = new();
             Random r = new Random();
 
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 100000; i++)
             {
-                bh.Insert(new(i));
+                bh.Insert(new(r.Next(1000)));
             }
-            Console.WriteLine(bh.heap.Count); 
-            bh.Print();
+            for (int i = 0; i < 100000; i++)
+            {
+                Console.WriteLine(bh.ExtractMin().Key);
+            }
+            Console.ReadLine();
         }
     }
 }

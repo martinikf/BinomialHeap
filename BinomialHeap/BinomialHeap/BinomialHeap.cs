@@ -21,15 +21,11 @@ namespace BinomialHeap
 
         public BinomialTree Min()
         {
-            BinomialTree min = null;
-
-            if (Size > 0) {
-                min = heap[0];
-                foreach (var tree in heap)
-                {
-                    if (tree.Key < min.Key)
-                        min = tree;
-                }
+            BinomialTree min = heap[0];
+            foreach (var tree in heap)
+            {
+                if (tree.Key < min.Key)
+                   min = tree;
             }
             return min;
         }
@@ -64,30 +60,36 @@ namespace BinomialHeap
 
         private void Union(BinomialHeap h)
         {
-            //Create list of trees from both heaps, heaps must be sorted beforehand!
             List<BinomialTree> trees = new();
-            heap.ForEach(t => trees.Add(t));
-            int i = 0;
-            //Merge
-            foreach (var tree in h.heap)
+            int it1 = 0, it2 = 0;
+            while (true)
             {
-                if(tree == null) { continue; }
-                else if(i >= trees.Count)
+                if(it1 >= heap.Count && it2 >= h.heap.Count)
                 {
-                    trees.Add(tree);
+                    break;
                 }
-                else if(tree.Degree <= trees[i].Degree)
+                else if(it1 >= heap.Count)
                 {
-                    trees.Insert(i, tree);
+                    trees.Add(h.heap[it2++]);
+                    continue;
+                }
+                else if(it2 >= h.heap.Count)
+                {
+                    trees.Add(heap[it1++]);
+                    continue;
+                }
+
+                if (heap[it1].Key < h.heap[it2].Key)
+                {
+                    trees.Add(heap[it1++]);
                 }
                 else
                 {
-                    i++;
-                }
+                    trees.Add(h.heap[it2++]);
+                } 
             }
 
-
-            i = 0;
+            int i = 0;
             while (i + 1 < trees.Count)
             {
                 if( trees[i].Degree != trees[i+1].Degree)
@@ -142,18 +144,29 @@ namespace BinomialHeap
 
         public void Delete(BinomialTree t)
         {
+            
+            if (t == null) return;
+
+            Size--;
+            if (t.LeftChild == null)
+            {
+                this.heap.Remove(t);
+                return;
+            }
+
             BinomialHeap newHeap = new BinomialHeap();
             List<BinomialTree> newList = new();
 
             newList.Add(t.LeftChild);
-            if(t.LeftChild != null)
-                foreach(var sib in t.LeftChild.Siblings)
-                {
-                    newList.Add(sib);
-                }
+            foreach (var sib in t.LeftChild.Siblings)
+            {
+                newList.Add(sib);
+            }
+
             newList.Reverse();
+            newList.ForEach(x => x.Parent = null);
             newHeap.heap = newList;
-            Size--;
+            newHeap.Size = Size;
             this.heap.Remove(t);
             this.Union(newHeap);
         }
