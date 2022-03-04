@@ -8,10 +8,10 @@ namespace BinomialHeap
 {
     internal class BinomialTree
     {
-        public BinomialTree Parent { get; set; }
+        public BinomialTree? Parent { get; set; }
         public int Key { get; set; }
         public List<BinomialTree> Siblings { get; set; }
-        public BinomialTree LeftChild { get; set; }
+        public BinomialTree? LeftChild { get; set; }
         public int Degree { get; set; }
        
 
@@ -20,6 +20,18 @@ namespace BinomialHeap
             Parent = null;
             this.Key = key;
             Siblings = new();
+        }
+
+        public void Print(bool printSibs)
+        {
+            Console.Write($"[{Key}:{Degree}]");
+            if(LeftChild != null) LeftChild.Print(true);
+            Console.WriteLine();
+            if (printSibs)
+                foreach(BinomialTree s in Siblings)
+                {
+                    s.Print(false);
+                }
         }
     }
 }

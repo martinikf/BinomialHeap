@@ -8,7 +8,7 @@ namespace BinomialHeap
 {
     internal class BinomialHeap
     {
-        private List<BinomialTree> heap; //Sorted by degrees
+        public List<BinomialTree> heap; //Sorted by degrees
         public BinomialHeap()
         {
             this.heap = new();
@@ -21,46 +21,58 @@ namespace BinomialHeap
 
         public BinomialTree Min()
         {
-            BinomialTree min = heap[0];
-            foreach (var tree in heap)
-            {
-                if (tree.Key < min.Key)
-                    min = tree;
+            BinomialTree min = null;
+
+            if (Size > 0) {
+                min = heap[0];
+                foreach (var tree in heap)
+                {
+                    if (tree.Key < min.Key)
+                        min = tree;
+                }
             }
             return min;
         }
 
-        //Determines which tree should be on top and connects them accordingly
+        //Determines which tree should be on top and connects them accordingly and return root
         public BinomialTree BinomialLink(BinomialTree y, BinomialTree z)
         {
-            // set z as min
-            if(y.Key < z.Key)
+            var top = z;
+            var bot = y;
+            if (y.Key < z.Key)
             {
-                (y, z) = (z, y);
+                top = y;
+                bot = z;
             }
 
-            y.Parent = z;
-            if(z.LeftChild != null)
+            top.Parent = null;   //should be null before
+            top.Siblings.Clear(); //should be empty list before
+
+            bot.Parent = top;
+            bot.Siblings.Clear(); //should be empty list before
+
+            if (top.LeftChild != null)
             {
-                y.Siblings = z.LeftChild.Siblings;
-                y.Siblings.Insert(0, z.LeftChild);
+                bot.Siblings.Add(top.LeftChild);
+                top.LeftChild.Siblings.ForEach(x => bot.Siblings.Add(x));
             }
 
-            z.LeftChild = y;
-            z.Degree++;
-
-            return z;
-           
+            top.LeftChild = bot;
+            top.Degree++;
+            return top;
         }
+
         private void Union(BinomialHeap h)
         {
             //Create list of trees from both heaps, heaps must be sorted beforehand!
             List<BinomialTree> trees = new();
             heap.ForEach(t => trees.Add(t));
             int i = 0;
+            //Merge
             foreach (var tree in h.heap)
             {
-                if(i >= trees.Count)
+                if(tree == null) { continue; }
+                else if(i >= trees.Count)
                 {
                     trees.Add(tree);
                 }
@@ -74,6 +86,7 @@ namespace BinomialHeap
                 }
             }
 
+
             i = 0;
             while (i + 1 < trees.Count)
             {
@@ -84,19 +97,19 @@ namespace BinomialHeap
                 }
                 else
                 {
-                    if(i + 2 < trees.Count && trees[i + 1].Degree == trees[i + 2].Degree)
+                    //3 trees with same degree 
+                    if(i + 2 < trees.Count && trees[i].Degree == trees[i + 1].Degree && trees[i + 1].Degree == trees[i + 2].Degree)
                     {
                         var newTree = BinomialLink(trees[i + 1], trees[i + 2]);
                         trees[i+1] = newTree;
                         trees.Remove(trees[i + 2]);
-                        i += 1;
                     }
+                    //2 trees with same degree
                     else
                     {
                         var newTree = BinomialLink(trees[i], trees[i + 1]);
                         trees[i] = newTree;
                         trees.Remove(trees[i + 1]);
-                        
                     }
                 }
             }
@@ -105,7 +118,7 @@ namespace BinomialHeap
 
         public void Insert(BinomialTree t)
         {
-            BinomialHeap newHeap = new BinomialHeap(new List<BinomialTree>() { t});
+            BinomialHeap newHeap = new BinomialHeap(new List<BinomialTree>() {t});
             Size++;
             this.Union(newHeap);
         }
@@ -133,10 +146,11 @@ namespace BinomialHeap
             List<BinomialTree> newList = new();
 
             newList.Add(t.LeftChild);
-            foreach(var sib in t.LeftChild.Siblings)
-            {
-                newList.Add(sib);
-            }
+            if(t.LeftChild != null)
+                foreach(var sib in t.LeftChild.Siblings)
+                {
+                    newList.Add(sib);
+                }
             newList.Reverse();
             newHeap.heap = newList;
             Size--;
@@ -153,20 +167,11 @@ namespace BinomialHeap
 
         public void Print()
         {
-            Console.WriteLine($"\nBINOMIAL HEAP [{heap.Count()};{Size}]");
-            Console.WriteLine($"Trees: {heap.Count}");
-            foreach(var tree in heap)
-            {
-                Console.WriteLine($"\nRoot:[{tree.Key};{tree.Degree}]");
-                if(tree.LeftChild != null)
-                {
-                    Console.Write($"[{tree.LeftChild.Key};{tree.LeftChild.Degree}]");
-                    if(tree.LeftChild.Siblings != null)
-                        foreach (var sib in tree.LeftChild.Siblings)
-                         Console.Write($"[{sib.Key};{sib.Degree}]");
-                }
-                Console.WriteLine();
-            }
+            Console.WriteLine($"Heap, keys: {Size}, trees: {heap.Count}");
+            heap.ForEach(x => { 
+                                  Console.WriteLine("\nTree"); 
+                                  x.Print(true); 
+                              });   
         }
     }
 }
