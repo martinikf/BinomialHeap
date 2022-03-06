@@ -61,7 +61,7 @@ namespace BinomialHeap
         {
             var trees = Merge(h);
             int i = 0;
-            while (i + 1 < trees.Count)
+            while (i + 1 < trees.Count())
             {
                 if (trees[i].Degree != trees[i + 1].Degree)
                 {
