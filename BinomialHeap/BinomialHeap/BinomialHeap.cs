@@ -30,7 +30,7 @@ namespace BinomialHeap
             return min;
         }
 
-        public BinomialTree BinomialLink(BinomialTree y, BinomialTree z)
+        private BinomialTree BinomialLink(BinomialTree y, BinomialTree z)
         {
             var top = z;
             var bot = y;
@@ -130,7 +130,7 @@ namespace BinomialHeap
             this.Union(newHeap);
         }
 
-        public void Delete(BinomialTree t)
+        private void DeleteMin(BinomialTree t)
         {
             if (t == null) return;
 
@@ -161,7 +161,7 @@ namespace BinomialHeap
         public BinomialTree ExtractMin()
         {
             var min = this.Min();
-            Delete(min);
+            DeleteMin(min);
             return min;
         }
 
