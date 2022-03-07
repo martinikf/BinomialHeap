@@ -8,6 +8,8 @@ namespace BinomialHeap
 {
     internal class BinomialHeap
     {
+
+        //TODO Size after Union
         public List<BinomialTree> heap;
         public BinomialHeap()
         {
@@ -61,7 +63,7 @@ namespace BinomialHeap
         {
             var trees = Merge(h);
             int i = 0;
-            while (i + 1 < trees.Count())
+            while (i + 1 < trees.Count)
             {
                 if (trees[i].Degree != trees[i + 1].Degree)
                 {
@@ -110,7 +112,7 @@ namespace BinomialHeap
                     continue;
                 }
 
-                if (heap[it1].Key < h.heap[it2].Key)
+                if (heap[it1].Degree < h.heap[it2].Degree)
                 {
                     trees.Add(heap[it1++]);
                 }
