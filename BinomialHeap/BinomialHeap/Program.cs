@@ -12,11 +12,14 @@ namespace BinomialHeap
             for (int i = 0; i < 4096; i++)
             {
                 bh.Insert(new(r.Next(1000)-500));
+                Console.WriteLine(bh.Size);
+
             }
 
             for (int i = 0; i < 4096; i++)
             {
-                Console.WriteLine(bh.ExtractMin().Key);
+                bh.ExtractMin();
+                Console.WriteLine(bh.Size);
                 //Console.WriteLine(bh.heap.Count);
                 //bh.Print();
             }

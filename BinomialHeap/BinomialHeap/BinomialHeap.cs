@@ -155,7 +155,7 @@ namespace BinomialHeap
             newList.Reverse();
             newList.ForEach(x => x.Parent = null);
             newHeap.heap = newList;
-            newHeap.Size = Size;
+            newHeap.Size = Size; //Je tohle potřeba?
             this.heap.Remove(t);
             this.Union(newHeap);
         }
